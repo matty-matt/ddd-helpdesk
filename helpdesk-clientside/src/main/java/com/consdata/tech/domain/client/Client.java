@@ -34,7 +34,7 @@ public class Client {
     @CommandHandler
     public void handle(CreateClientIssueCommand cmd) {
         if (openIssues.size() < 5) {
-            apply(new ClientIssueCreatedEvent(cmd.clientId(), cmd.issueId()));
+            apply(new ClientIssueCreatedEvent(cmd.issueId(), cmd.title(), cmd.description()));
         }
     }
 
@@ -45,7 +45,7 @@ public class Client {
 
     @CommandHandler
     public void handle(CloseClientIssueCommand cmd) {
-        apply(new ClientIssueCreatedEvent(cmd.clientId(), cmd.issueId()));
+        apply(new ClientIssueClosedEvent(cmd.clientId(), cmd.issueId()));
     }
 
     @EventSourcingHandler
