@@ -1,4 +1,11 @@
 package com.consdata.tech.domain.client;
 
-public record ClientIssueCreatedEvent(String issueId, String title, String description) {
+import lombok.Value;
+
+@Value
+public class ClientIssueCreatedEvent {
+    String clientId;
+    String issueId;
+    String title;
+    String description;
 }

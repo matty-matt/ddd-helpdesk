@@ -1,7 +1,11 @@
 package com.consdata.tech.domain.client;
 
+import lombok.Value;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
-public record CloseClientIssueCommand(@TargetAggregateIdentifier String clientId,
-                                      String issueId) {
+@Value
+public class CloseClientIssueCommand{
+    @TargetAggregateIdentifier
+    String clientId;
+    String issueId;
 }

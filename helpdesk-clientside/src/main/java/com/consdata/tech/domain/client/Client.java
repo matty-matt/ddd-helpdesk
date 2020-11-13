@@ -2,8 +2,10 @@ package com.consdata.tech.domain.client;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
 import java.util.HashSet;
@@ -14,42 +16,45 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @Aggregate
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class Client {
+    @AggregateIdentifier
     private String clientId;
     private String name;
     private Set<String> openIssues;
 
     @CommandHandler
     public Client(CreateClientCommand cmd) {
-       apply(new ClientCreatedEvent(cmd.clientId(), cmd.name()));
+       apply(new ClientCreatedEvent(cmd.getClientId(), cmd.getName()));
     }
 
     @EventSourcingHandler
     public void on(ClientCreatedEvent evt) {
-        this.clientId = evt.clientId();
-        this.name = evt.name();
+        this.clientId = evt.getClientId();
+        this.name = evt.getName();
         this.openIssues = new HashSet<>(5);
     }
 
     @CommandHandler
     public void handle(CreateClientIssueCommand cmd) {
-        if (openIssues.size() < 5) {
-            apply(new ClientIssueCreatedEvent(cmd.issueId(), cmd.title(), cmd.description()));
+        if (openIssues.size() == 5) {
+            log.info("Client cannot have more than 5 open issues.");
         }
+        apply(new ClientIssueCreatedEvent(cmd.getClientId(), cmd.getIssueId(), cmd.getTitle(), cmd.getDescription()));
     }
 
     @EventSourcingHandler
     public void on(ClientIssueCreatedEvent event) {
-        this.openIssues.add(event.issueId());
+        this.openIssues.add(event.getIssueId());
     }
 
     @CommandHandler
     public void handle(CloseClientIssueCommand cmd) {
-        apply(new ClientIssueClosedEvent(cmd.clientId(), cmd.issueId()));
+        apply(new ClientIssueClosedEvent(cmd.getClientId(), cmd.getIssueId()));
     }
 
     @EventSourcingHandler
     public void on(ClientIssueClosedEvent event) {
-        this.openIssues.remove(event.issueId());
+        this.openIssues.remove(event.getIssueId());
     }
 }

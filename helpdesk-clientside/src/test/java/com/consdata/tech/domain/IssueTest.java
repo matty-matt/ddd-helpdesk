@@ -15,6 +15,7 @@ public class IssueTest {
 
     private FixtureConfiguration<Issue> fixture;
     private String issueId;
+    private String clientId;
     private String title;
     private String description;
 
@@ -23,6 +24,7 @@ public class IssueTest {
     public void setup() {
         this.fixture = new AggregateTestFixture<>(Issue.class);
         this.issueId = UUID.randomUUID().toString();
+        this.clientId = UUID.randomUUID().toString();
         this.title = "Issue title!";
         this.description = "Short description";
     }
@@ -31,10 +33,11 @@ public class IssueTest {
     public void shouldCreateIssue() {
         this.fixture
                 .givenNoPriorActivity()
-                .when(new CreateIssueCommand(issueId, title, description))
-                .expectEvents(new IssueCreatedEvent(issueId, title, description))
+                .when(new CreateIssueCommand(issueId, clientId, title, description))
+                .expectEvents(new IssueCreatedEvent(issueId, clientId, title, description))
                 .expectState(state -> {
                     assertThat(state.getIssueId()).isEqualTo(issueId);
+                    assertThat(state.getClientId()).isEqualTo(clientId);
                     assertThat(state.getDescription()).isEqualTo(description);
                     assertThat(state.getTitle()).isEqualTo(title);
                     assertThat(state.getStatus()).isEqualTo(Issue.IssueStatus.OPEN);
@@ -44,7 +47,7 @@ public class IssueTest {
     @Test
     public void shouldResolveIssue() {
         this.fixture
-                .given(new IssueCreatedEvent(issueId, title, description))
+                .given(new IssueCreatedEvent(issueId, clientId, title, description))
                 .when(new ResolveIssueCommand(issueId))
                 .expectEvents(new IssueResolvedEvent(issueId))
                 .expectState(state -> {
@@ -56,7 +59,7 @@ public class IssueTest {
     public void shouldCloseIssue() {
         this.fixture
                 .given(
-                        new IssueCreatedEvent(issueId, title, description),
+                        new IssueCreatedEvent(issueId, clientId, title, description),
                         new IssueResolvedEvent(issueId))
                 .when(new CloseIssueCommand(issueId))
                 .expectEvents(new IssueClosedEvent(issueId))
@@ -69,7 +72,7 @@ public class IssueTest {
     public void shouldReopenIssue() {
         this.fixture
                 .given(
-                        new IssueCreatedEvent(issueId, title, description),
+                        new IssueCreatedEvent(issueId, clientId, title, description),
                         new IssueResolvedEvent(issueId),
                         new IssueClosedEvent(issueId))
                 .when(new ReopenIssueCommand(issueId))

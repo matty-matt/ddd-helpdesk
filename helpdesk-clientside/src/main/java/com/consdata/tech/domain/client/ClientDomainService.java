@@ -1,5 +1,6 @@
 package com.consdata.tech.domain.client;
 
+import com.consdata.tech.domain.issue.CloseIssueCommand;
 import com.consdata.tech.domain.issue.CreateIssueCommand;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -13,6 +14,11 @@ public class ClientDomainService {
 
     @EventHandler
     public void handle(ClientIssueCreatedEvent event) {
-        commandGateway.send(new CreateIssueCommand(event.issueId(), event.title(), event.description()));
+        commandGateway.send(new CreateIssueCommand(event.getIssueId(), event.getClientId(), event.getTitle(), event.getDescription()));
+    }
+
+    @EventHandler
+    public void handle(ClientIssueClosedEvent event) {
+        commandGateway.send(new CloseIssueCommand(event.getIssueId()));
     }
 }

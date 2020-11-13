@@ -1,4 +1,8 @@
 package com.consdata.tech.domain.issue;
 
-public record IssueClosedEvent(String issueId) {
+import lombok.Value;
+
+@Value
+public class IssueClosedEvent {
+    String issueId;
 }

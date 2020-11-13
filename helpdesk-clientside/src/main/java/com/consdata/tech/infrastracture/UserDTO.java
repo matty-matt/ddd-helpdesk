@@ -1,4 +1,12 @@
 package com.consdata.tech.infrastracture;
 
-public record UserDTO(String name) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+public class UserDTO {
+    private String name;
 }

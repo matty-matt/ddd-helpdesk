@@ -3,7 +3,6 @@ package com.consdata.tech.domain.client;
 import lombok.Value;
 
 @Value
-public class ClientIssueClosedEvent {
+public class GetClientIssuesQuery {
     String clientId;
-    String issueId;
 }

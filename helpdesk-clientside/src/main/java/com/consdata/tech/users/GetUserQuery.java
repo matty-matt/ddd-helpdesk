@@ -1,4 +1,8 @@
 package com.consdata.tech.users;
 
-public record GetUserQuery(String name) {
+import lombok.Value;
+
+@Value
+public class GetUserQuery {
+    String name;
 }

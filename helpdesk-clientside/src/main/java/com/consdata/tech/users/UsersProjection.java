@@ -10,15 +10,15 @@ import java.util.Map;
 
 @Service
 public class UsersProjection {
-    private Map<String, String> users = new HashMap<>();
+    private final Map<String, String> users = new HashMap<>();
 
     @EventHandler
     public void handle(ClientCreatedEvent event) {
-        users.put(event.name(), event.clientId());
+        users.put(event.getName(), event.getClientId());
     }
 
     @QueryHandler
     public String handle(GetUserQuery query) {
-        return users.get(query.name());
+        return users.get(query.getName());
     }
 }

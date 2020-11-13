@@ -1,4 +1,13 @@
 package com.consdata.tech.infrastracture;
 
-public record IssueDTO(String clientId, String title, String description) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
+public class IssueDTO {
+    private String issueId;
+    private String title;
+    private String description;
+    private String status;
 }

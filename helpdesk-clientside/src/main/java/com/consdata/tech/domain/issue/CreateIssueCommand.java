@@ -1,7 +1,13 @@
 package com.consdata.tech.domain.issue;
 
+import lombok.Value;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
-public record CreateIssueCommand(@TargetAggregateIdentifier String issueId,
-                                 String title,
-                                 String description) {}
+@Value
+public class CreateIssueCommand {
+    @TargetAggregateIdentifier
+    String issueId;
+    String clientId;
+    String title;
+    String description;
+}
