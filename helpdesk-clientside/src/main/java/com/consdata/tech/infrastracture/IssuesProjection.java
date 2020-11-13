@@ -37,37 +37,26 @@ public class IssuesProjection {
 
     @EventHandler
     public void handle(IssueClosedEvent event) {
-        IssueDTO originalIssue = issues.get(event.getIssueId());
-        originalIssue.setStatus(Issue.IssueStatus.CLOSED.name());
-        issues.put(event.getIssueId(), originalIssue);
-
-        Map<String, Map<String, IssueDTO>> modifiedUserIssues = userIssues.entrySet().stream()
-                .filter(as -> as.getValue().values().stream().anyMatch(issue -> issue.getIssueId().equals(event.getIssueId())))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        modifiedUserIssues.forEach((userId, mapOfIssues) -> {
-            Map<String, IssueDTO> modifiedIssues = mapOfIssues.values()
-                    .stream()
-                    .map(issueDTO -> new IssueDTO(issueDTO.getIssueId(), issueDTO.getTitle(), issueDTO.getDescription(), Issue.IssueStatus.CLOSED.name()))
-                    .collect(Collectors.toMap(IssueDTO::getIssueId, as -> as));
-            userIssues.put(userId, modifiedIssues);
-        });
+        updateIssueStatus(event.getIssueId(), Issue.IssueStatus.CLOSED.name());
     }
 
     @EventHandler
     public void handle(IssueResolvedEvent event) {
-        IssueDTO originalIssue = issues.get(event.getIssueId());
-        originalIssue.setStatus(Issue.IssueStatus.RESOLVED.name());
-        issues.put(event.getIssueId(), originalIssue);
+        updateIssueStatus(event.getIssueId(), Issue.IssueStatus.RESOLVED.name());
+    }
 
-        Map<String, Map<String, IssueDTO>> modifiedUserIssues = userIssues.entrySet().stream()
-                .filter(as -> as.getValue().values().stream().anyMatch(issue -> issue.getIssueId().equals(event.getIssueId())))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        modifiedUserIssues.forEach((userId, mapOfIssues) -> {
-            Map<String, IssueDTO> modifiedIssues = mapOfIssues.values()
-                    .stream()
-                    .map(issueDTO -> new IssueDTO(issueDTO.getIssueId(), issueDTO.getTitle(), issueDTO.getDescription(), Issue.IssueStatus.RESOLVED.name()))
-                    .collect(Collectors.toMap(IssueDTO::getIssueId, as -> as));
-            userIssues.put(userId, modifiedIssues);
+    private void updateIssueStatus(String issueId, String status) {
+        IssueDTO originalIssue = issues.get(issueId);
+        originalIssue.setStatus(status);
+        issues.put(issueId, originalIssue);
+
+        List<String> usersHavingThisIssue = userIssues.entrySet().stream()
+                .filter(as -> as.getValue().values().stream().anyMatch(issue -> issue.getIssueId().equals(issueId)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        usersHavingThisIssue.forEach(userId -> {
+            userIssues.get(userId).get(issueId).setStatus(status);
         });
     }
 }

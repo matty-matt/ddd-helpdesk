@@ -18,6 +18,8 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @Getter
 @Slf4j
 public class Client {
+    private static final int MAX_OPEN_ISSUES = 3;
+
     @AggregateIdentifier
     private String clientId;
     private String name;
@@ -37,8 +39,9 @@ public class Client {
 
     @CommandHandler
     public void handle(CreateClientIssueCommand cmd) {
-        if (openIssues.size() == 5) {
-            log.info("Client cannot have more than 5 open issues.");
+        if (openIssues.size() == MAX_OPEN_ISSUES) {
+            log.warn("Client cannot have more than {} open issues.", MAX_OPEN_ISSUES);
+            return;
         }
         apply(new ClientIssueCreatedEvent(cmd.getClientId(), cmd.getIssueId(), cmd.getTitle(), cmd.getDescription()));
     }

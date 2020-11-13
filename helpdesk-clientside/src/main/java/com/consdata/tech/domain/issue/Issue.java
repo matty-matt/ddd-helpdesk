@@ -44,7 +44,8 @@ public class Issue {
     @CommandHandler
     public void handle(CloseIssueCommand cmd) {
         if (IssueStatus.RESOLVED != status) {
-            log.info("Cannot close issue that is not resolved yet");
+            log.warn("Cannot close issue that is not resolved yet");
+            return;
         }
         apply(new IssueClosedEvent(cmd.getIssueId()));
     }
@@ -57,7 +58,8 @@ public class Issue {
     @CommandHandler
     public void handle(ReopenIssueCommand cmd) {
         if (IssueStatus.CLOSED != status) {
-            log.info("Cannot reopen issue that is not closed");
+            log.warn("Cannot reopen issue that is not closed");
+            return;
         }
         apply(new IssueReopenedEvent(cmd.getIssueId()));
     }
@@ -70,7 +72,8 @@ public class Issue {
     @CommandHandler
     public void handle(ResolveIssueCommand cmd) {
         if (IssueStatus.OPEN != status) {
-            log.info("Cannot resolve issue that is not open");
+            log.warn("Cannot resolve issue that is not open");
+            return;
         }
         apply(new IssueResolvedEvent(cmd.getIssueId()));
 
