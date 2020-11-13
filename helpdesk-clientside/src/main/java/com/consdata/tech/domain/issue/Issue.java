@@ -1,5 +1,6 @@
 package com.consdata.tech.domain.issue;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -10,6 +11,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 @Aggregate
 @NoArgsConstructor
+@Getter
 public class Issue {
 
     @AggregateIdentifier
@@ -18,7 +20,7 @@ public class Issue {
     private String title;
     private String description;
 
-    enum IssueStatus {
+    public enum IssueStatus {
         OPEN, RESOLVED, CLOSED
     }
 
@@ -50,12 +52,24 @@ public class Issue {
     @CommandHandler
     public void handle(ReopenIssueCommand cmd) {
         if (IssueStatus.CLOSED == status) {
-            apply(new ReopenIssueEvent(cmd.issueId()));
+            apply(new IssueReopenedEvent(cmd.issueId()));
         }
     }
 
     @EventSourcingHandler
-    public void on (ReopenIssueEvent evt) {
+    public void on(IssueReopenedEvent evt) {
         this.status = IssueStatus.OPEN;
+    }
+
+    @CommandHandler
+    public void handle(ResolveIssueCommand cmd) {
+        if (IssueStatus.OPEN == status) {
+            apply(new IssueResolvedEvent(cmd.issueId()));
+        }
+    }
+
+    @EventSourcingHandler
+    public void on(IssueResolvedEvent evt) {
+        this.status = IssueStatus.RESOLVED;
     }
 }
