@@ -8,6 +8,8 @@ USER_ID="$(curl localhost:8080/users/mateusz)"
 
 #create issue
 curl -H "Content-Type: application/json" -H "client: $USER_ID" -X POST localhost:8080/issues -d '{"title": "Nie działająca strona", "description": "Strona nie działa"}'
+curl -H "Content-Type: application/json" -H "client: $USER_ID" -X POST localhost:8080/issues -d '{"title": "Problem z aplikacją", "description": "Aplikacja nie działa poprawnie..."}'
+curl -H "Content-Type: application/json" -H "client: $USER_ID" -X POST localhost:8080/issues -d '{"title": "Brak możliwości zalogowania się", "description": "Po wpisaniu poprawnych danych logowania, nie można się zalogować"}'
 
 #my issues
 curl -H "client: $USER_ID" localhost:8080/issues/$USER_ID | json_pp
