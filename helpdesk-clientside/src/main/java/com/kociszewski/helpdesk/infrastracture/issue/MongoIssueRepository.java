@@ -1,17 +1,40 @@
 package com.kociszewski.helpdesk.infrastracture.issue;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.kociszewski.helpdesk.domain.issue.Issue;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface MongoIssueRepository extends MongoRepository<IssueDTO, String> {
+@Repository
+@RequiredArgsConstructor
+public class MongoIssueRepository implements IssueRepository {
 
-    List<IssueDTO> findAllByClientId(String clientId);
+    private final MongoTemplate mongoTemplate;
 
-    default void updateStatusByIssueId(String issueId, String status) {
-        // DO NOT TRY THIS ON PROD :)
-        IssueDTO issue = findById(issueId).orElseThrow();
-        issue.setStatus(status);
-        save(issue);
+    @Override
+    public List<IssueDTO> findAllByClientId(String clientId) {
+        return mongoTemplate.find(
+                Query.query(Criteria.where("clientId").is(clientId)),
+                IssueDTO.class
+        );
+    }
+
+    @Override
+    public void insert(IssueDTO issue) {
+        mongoTemplate.insert(issue);
+    }
+
+    @Override
+    public void updateStatusByIssueId(String issueId, String status) {
+        mongoTemplate.findAndModify(
+                Query.query(Criteria.where("issueId").is(issueId)),
+                Update.update("status", Issue.IssueStatus.CLOSED.name()),
+                IssueDTO.class
+        );
     }
 }
