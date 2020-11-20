@@ -10,6 +10,7 @@ CLIENT_ID="$(curl localhost:8080/clients/mateusz)"
 curl -H "Content-Type: application/json" -H "client: $CLIENT_ID" -X POST localhost:8080/issues -d '{"title": "Nie działająca strona", "description": "Strona nie działa"}'
 curl -H "Content-Type: application/json" -H "client: $CLIENT_ID" -X POST localhost:8080/issues -d '{"title": "Problem z aplikacją", "description": "Aplikacja nie działa poprawnie..."}'
 curl -H "Content-Type: application/json" -H "client: $CLIENT_ID" -X POST localhost:8080/issues -d '{"title": "Brak możliwości zalogowania się", "description": "Po wpisaniu poprawnych danych logowania, nie można się zalogować"}'
+curl -H "Content-Type: application/json" -H "client: $CLIENT_ID" -X POST localhost:8080/issues -d '{"title": "Strona jest nieczytelna", "description": "No nie idzie się rozczytać!"}'
 
 #my issues
 curl -H "client: $CLIENT_ID" localhost:8080/issues/$CLIENT_ID | json_pp
