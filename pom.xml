@@ -16,8 +16,8 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.consdata</groupId>
-    <artifactId>ddd-consdata-tech</artifactId>
+    <groupId>com.kociszewski</groupId>
+    <artifactId>ddd-helpdesk</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
