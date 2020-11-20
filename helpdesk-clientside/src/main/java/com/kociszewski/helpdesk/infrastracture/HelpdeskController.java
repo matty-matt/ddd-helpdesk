@@ -5,7 +5,11 @@ import com.kociszewski.helpdesk.domain.client.CreateClientCommand;
 import com.kociszewski.helpdesk.domain.client.CreateClientIssueCommand;
 import com.kociszewski.helpdesk.domain.client.GetClientIssuesQuery;
 import com.kociszewski.helpdesk.domain.issue.ResolveIssueCommand;
-import com.kociszewski.helpdesk.users.GetUserQuery;
+import com.kociszewski.helpdesk.infrastracture.issue.IssueDTO;
+import com.kociszewski.helpdesk.infrastracture.issue.IssueData;
+import com.kociszewski.helpdesk.infrastracture.issue.UpdateIssueData;
+import com.kociszewski.helpdesk.infrastracture.client.ClientDTO;
+import com.kociszewski.helpdesk.infrastracture.client.GetClientQuery;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
@@ -22,14 +26,14 @@ public class HelpdeskController {
     private final CommandGateway commandGateway;
     private final QueryGateway queryGateway;
 
-    @PostMapping("/users")
-    public void createUser(@RequestBody UserDTO userDTO) {
-        commandGateway.send(new CreateClientCommand(UUID.randomUUID().toString(), userDTO.getName()));
+    @PostMapping("/clients")
+    public void createClient(@RequestBody ClientDTO clientDTO) {
+        commandGateway.send(new CreateClientCommand(UUID.randomUUID().toString(), clientDTO.getName()));
     }
 
-    @GetMapping("/users/{name}")
-    public String getUserId(@PathVariable String name) {
-        return queryGateway.query(new GetUserQuery(name), ResponseTypes.instanceOf(String.class)).join();
+    @GetMapping("/clients/{name}")
+    public String getClientId(@PathVariable String name) {
+        return queryGateway.query(new GetClientQuery(name), ResponseTypes.instanceOf(String.class)).join();
     }
 
     @PostMapping("/issues")

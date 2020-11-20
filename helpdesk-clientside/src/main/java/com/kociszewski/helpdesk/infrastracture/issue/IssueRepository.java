@@ -1,6 +1,6 @@
-package com.kociszewski.helpdesk.infrastracture.storage;
+package com.kociszewski.helpdesk.infrastracture.issue;
 
-import com.kociszewski.helpdesk.infrastracture.IssueDTO;
+import com.kociszewski.helpdesk.infrastracture.issue.IssueDTO;
 
 import java.util.List;
 

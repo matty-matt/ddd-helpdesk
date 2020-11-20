@@ -1,6 +1,5 @@
-package com.kociszewski.helpdesk.infrastracture.storage;
+package com.kociszewski.helpdesk.infrastracture.issue;
 
-import com.kociszewski.helpdesk.infrastracture.IssueDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -12,20 +11,20 @@ import java.util.stream.Collectors;
 @Repository
 public class InMemoryIssueRepository implements IssueRepository {
 
-    private final Map<String, Map<String, IssueDTO>> userIssues = new HashMap<>();
+    private final Map<String, Map<String, IssueDTO>> clientIssues = new HashMap<>();
     private final Map<String, IssueDTO> issues = new HashMap<>();
 
     @Override
     public List<IssueDTO> findAllIssuesByClientId(String clientId) {
-        return new ArrayList<>(userIssues.get(clientId).values());
+        return new ArrayList<>(clientIssues.get(clientId).values());
     }
 
     @Override
     public void insertIssue(String clientId, IssueDTO issue) {
         issues.put(issue.getIssueId(), issue);
-        Map<String, IssueDTO> clientIssues = userIssues.getOrDefault(clientId, new HashMap<>());
+        Map<String, IssueDTO> clientIssues = this.clientIssues.getOrDefault(clientId, new HashMap<>());
         clientIssues.put(issue.getIssueId(), issue);
-        userIssues.put(clientId, clientIssues);
+        this.clientIssues.put(clientId, clientIssues);
     }
 
     @Override
@@ -34,13 +33,11 @@ public class InMemoryIssueRepository implements IssueRepository {
         originalIssue.setStatus(status);
         issues.put(issueId, originalIssue);
 
-        List<String> usersHavingThisIssue = userIssues.entrySet().stream()
+        List<String> clientsHavingThisIssue = clientIssues.entrySet().stream()
                 .filter(as -> as.getValue().values().stream().anyMatch(issue -> issue.getIssueId().equals(issueId)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        usersHavingThisIssue.forEach(userId -> {
-            userIssues.get(userId).get(issueId).setStatus(status);
-        });
+        clientsHavingThisIssue.forEach(clientId -> clientIssues.get(clientId).get(issueId).setStatus(status));
     }
 }

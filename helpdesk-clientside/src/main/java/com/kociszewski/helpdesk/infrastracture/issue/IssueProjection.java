@@ -1,11 +1,10 @@
-package com.kociszewski.helpdesk.infrastracture;
+package com.kociszewski.helpdesk.infrastracture.issue;
 
 import com.kociszewski.helpdesk.domain.client.GetClientIssuesQuery;
 import com.kociszewski.helpdesk.domain.issue.Issue;
 import com.kociszewski.helpdesk.domain.issue.IssueClosedEvent;
 import com.kociszewski.helpdesk.domain.issue.IssueCreatedEvent;
 import com.kociszewski.helpdesk.domain.issue.IssueResolvedEvent;
-import com.kociszewski.helpdesk.infrastracture.storage.IssueRepository;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;

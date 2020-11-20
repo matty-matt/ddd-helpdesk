@@ -1,4 +1,4 @@
-package com.kociszewski.helpdesk.infrastracture;
+package com.kociszewski.helpdesk.infrastracture.issue;
 
 import lombok.Data;
 
