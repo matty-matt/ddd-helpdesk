@@ -1,24 +1,24 @@
 package com.kociszewski.helpdesk.infrastracture.client;
 
 import com.kociszewski.helpdesk.domain.client.ClientCreatedEvent;
+import lombok.RequiredArgsConstructor;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Service
+@RequiredArgsConstructor
 public class ClientsProjection {
-    private final Map<String, String> clients = new HashMap<>();
+
+    private final ClientRepository clientRepository;
 
     @EventHandler
     public void handle(ClientCreatedEvent event) {
-        clients.put(event.getName(), event.getClientId());
+        clientRepository.insertClient(event.getClientId(), event.getName());
     }
 
     @QueryHandler
     public String handle(GetClientQuery query) {
-        return clients.get(query.getName());
+        return clientRepository.findClientIdByName(query.getName());
     }
 }
