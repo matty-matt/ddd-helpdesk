@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class ClientDTO {
+    private String id;
     private String name;
 }

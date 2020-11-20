@@ -14,11 +14,11 @@ public class ClientsProjection {
 
     @EventHandler
     public void handle(ClientCreatedEvent event) {
-        clientRepository.insertClient(event.getClientId(), event.getName());
+        clientRepository.insert(new ClientDTO(event.getClientId(), event.getName()));
     }
 
     @QueryHandler
     public String handle(GetClientQuery query) {
-        return clientRepository.findClientIdByName(query.getName());
+        return clientRepository.findByName(query.getName()).getId();
     }
 }

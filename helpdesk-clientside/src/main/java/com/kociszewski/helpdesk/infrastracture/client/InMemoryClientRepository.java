@@ -7,15 +7,15 @@ import java.util.Map;
 
 @Repository
 public class InMemoryClientRepository implements ClientRepository {
-    private final Map<String, String> clients = new HashMap<>();
+    private final Map<String, ClientDTO> clients = new HashMap<>();
 
     @Override
-    public String findClientIdByName(String name) {
+    public ClientDTO findByName(String name) {
         return clients.get(name);
     }
 
     @Override
-    public void insertClient(String clientId, String clientName) {
-        clients.put(clientName, clientId);
+    public void insert(ClientDTO clientDTO) {
+        clients.put(clientDTO.getName(), clientDTO);
     }
 }

@@ -19,22 +19,28 @@ public class IssueProjection {
 
     @EventHandler
     public void handle(IssueCreatedEvent event) {
-        IssueDTO issue = new IssueDTO(event.getIssueId(), event.getTitle(), event.getDescription(), Issue.IssueStatus.OPEN.name());
-        issueRepository.insertIssue(event.getClientId(), issue);
+        IssueDTO issue = IssueDTO.builder()
+                .issueId(event.getIssueId())
+                .title(event.getTitle())
+                .description(event.getDescription())
+                .status(Issue.IssueStatus.OPEN.name())
+                .clientId(event.getClientId())
+                .build();
+        issueRepository.insert(issue);
     }
 
     @QueryHandler
     public List<IssueDTO> handle(GetClientIssuesQuery query) {
-        return issueRepository.findAllIssuesByClientId(query.getClientId());
+        return issueRepository.findAllByClientId(query.getClientId());
     }
 
     @EventHandler
     public void handle(IssueClosedEvent event) {
-        issueRepository.updateIssueStatusByIssueId(event.getIssueId(), Issue.IssueStatus.CLOSED.name());
+        issueRepository.updateStatusByIssueId(event.getIssueId(), Issue.IssueStatus.CLOSED.name());
     }
 
     @EventHandler
     public void handle(IssueResolvedEvent event) {
-        issueRepository.updateIssueStatusByIssueId(event.getIssueId(), Issue.IssueStatus.RESOLVED.name());
+        issueRepository.updateStatusByIssueId(event.getIssueId(), Issue.IssueStatus.RESOLVED.name());
     }
 }

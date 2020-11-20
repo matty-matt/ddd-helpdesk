@@ -15,20 +15,20 @@ public class InMemoryIssueRepository implements IssueRepository {
     private final Map<String, IssueDTO> issues = new HashMap<>();
 
     @Override
-    public List<IssueDTO> findAllIssuesByClientId(String clientId) {
+    public List<IssueDTO> findAllByClientId(String clientId) {
         return new ArrayList<>(clientIssues.get(clientId).values());
     }
 
     @Override
-    public void insertIssue(String clientId, IssueDTO issue) {
+    public void insert(IssueDTO issue) {
         issues.put(issue.getIssueId(), issue);
-        Map<String, IssueDTO> clientIssues = this.clientIssues.getOrDefault(clientId, new HashMap<>());
+        Map<String, IssueDTO> clientIssues = this.clientIssues.getOrDefault(issue.getClientId(), new HashMap<>());
         clientIssues.put(issue.getIssueId(), issue);
-        this.clientIssues.put(clientId, clientIssues);
+        this.clientIssues.put(issue.getClientId(), clientIssues);
     }
 
     @Override
-    public void updateIssueStatusByIssueId(String issueId, String status) {
+    public void updateStatusByIssueId(String issueId, String status) {
         IssueDTO originalIssue = issues.get(issueId);
         originalIssue.setStatus(status);
         issues.put(issueId, originalIssue);
