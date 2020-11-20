@@ -1,11 +1,13 @@
 package com.kociszewski.helpdesk.infrastracture.client;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Repository
+@Qualifier("memory")
 public class InMemoryClientRepository implements ClientRepository {
     private final Map<String, ClientDTO> clients = new HashMap<>();
 

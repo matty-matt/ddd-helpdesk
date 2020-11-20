@@ -2,6 +2,7 @@ package com.kociszewski.helpdesk.infrastracture.issue;
 
 import com.kociszewski.helpdesk.domain.issue.Issue;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Qualifier("mongo")
 public class MongoIssueRepository implements IssueRepository {
 
     private final MongoTemplate mongoTemplate;

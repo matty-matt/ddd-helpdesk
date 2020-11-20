@@ -5,17 +5,21 @@ import com.kociszewski.helpdesk.domain.issue.Issue;
 import com.kociszewski.helpdesk.domain.issue.IssueClosedEvent;
 import com.kociszewski.helpdesk.domain.issue.IssueCreatedEvent;
 import com.kociszewski.helpdesk.domain.issue.IssueResolvedEvent;
-import lombok.RequiredArgsConstructor;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class IssueProjection {
+
     private final IssueRepository issueRepository;
+
+    public IssueProjection(@Qualifier("memory") IssueRepository issueRepository) {
+        this.issueRepository = issueRepository;
+    }
 
     @EventHandler
     public void handle(IssueCreatedEvent event) {

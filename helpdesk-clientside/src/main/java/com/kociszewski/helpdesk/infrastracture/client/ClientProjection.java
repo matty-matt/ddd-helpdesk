@@ -1,16 +1,19 @@
 package com.kociszewski.helpdesk.infrastracture.client;
 
 import com.kociszewski.helpdesk.domain.client.ClientCreatedEvent;
-import lombok.RequiredArgsConstructor;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class ClientsProjection {
+public class ClientProjection {
 
     private final ClientRepository clientRepository;
+
+    public ClientProjection(@Qualifier("memory") ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @EventHandler
     public void handle(ClientCreatedEvent event) {

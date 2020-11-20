@@ -1,5 +1,6 @@
 package com.kociszewski.helpdesk.infrastracture.issue;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
+@Qualifier("memory")
 public class InMemoryIssueRepository implements IssueRepository {
 
     private final Map<String, Map<String, IssueDTO>> clientIssues = new HashMap<>();
