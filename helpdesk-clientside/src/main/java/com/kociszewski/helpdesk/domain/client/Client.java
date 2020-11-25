@@ -34,7 +34,7 @@ public class Client {
     public void on(ClientCreatedEvent evt) {
         this.clientId = evt.getClientId();
         this.name = evt.getName();
-        this.openIssues = new HashSet<>(5);
+        this.openIssues = new HashSet<>(MAX_OPEN_ISSUES);
     }
 
     @CommandHandler
