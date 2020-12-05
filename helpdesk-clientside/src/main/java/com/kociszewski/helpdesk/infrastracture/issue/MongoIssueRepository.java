@@ -35,7 +35,7 @@ public class MongoIssueRepository implements IssueRepository {
     public void updateStatusByIssueId(String issueId, String status) {
         mongoTemplate.findAndModify(
                 Query.query(Criteria.where("issueId").is(issueId)),
-                Update.update("status", Issue.IssueStatus.CLOSED.name()),
+                Update.update("status", status),
                 IssueDTO.class
         );
     }
