@@ -71,6 +71,7 @@ public class Issue {
 
     @CommandHandler
     public void handle(ResolveIssueCommand cmd) {
+        // Potentially command would come from Worker context
         if (IssueStatus.OPEN != status) {
             log.warn("Cannot resolve issue that is not open");
             return;
