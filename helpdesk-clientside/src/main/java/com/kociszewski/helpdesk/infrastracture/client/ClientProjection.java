@@ -11,7 +11,7 @@ public class ClientProjection {
 
     private final ClientRepository clientRepository;
 
-    public ClientProjection(@Qualifier("memory") ClientRepository clientRepository) {
+    public ClientProjection(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 

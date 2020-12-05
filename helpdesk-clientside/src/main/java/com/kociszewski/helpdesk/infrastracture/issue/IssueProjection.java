@@ -17,7 +17,7 @@ public class IssueProjection {
 
     private final IssueRepository issueRepository;
 
-    public IssueProjection(@Qualifier("memory") IssueRepository issueRepository) {
+    public IssueProjection(IssueRepository issueRepository) {
         this.issueRepository = issueRepository;
     }
 
