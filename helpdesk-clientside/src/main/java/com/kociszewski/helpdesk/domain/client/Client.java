@@ -18,12 +18,12 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @Getter
 @Slf4j
 public class Client {
-    private static final int MAX_OPEN_ISSUES = 3;
+    private static final int MAX_NUMBER_OF_PROGRESS_ISSUES = 3;
 
     @AggregateIdentifier
     private String clientId;
     private String name;
-    private Set<String> openIssues;
+    private Set<String> issuesInProgress;
 
     @CommandHandler
     public Client(CreateClientCommand cmd) {
@@ -34,13 +34,13 @@ public class Client {
     public void on(ClientCreatedEvent evt) {
         this.clientId = evt.getClientId();
         this.name = evt.getName();
-        this.openIssues = new HashSet<>(MAX_OPEN_ISSUES);
+        this.issuesInProgress = new HashSet<>(MAX_NUMBER_OF_PROGRESS_ISSUES);
     }
 
     @CommandHandler
     public void handle(CreateClientIssueCommand cmd) {
-        if (openIssues.size() == MAX_OPEN_ISSUES) {
-            log.warn("Client cannot have more than {} open issues.", MAX_OPEN_ISSUES);
+        if (issuesInProgress.size() == MAX_NUMBER_OF_PROGRESS_ISSUES) {
+            log.warn("Client cannot have more than {} issues in progress.", MAX_NUMBER_OF_PROGRESS_ISSUES);
             return;
         }
         apply(new ClientIssueCreatedEvent(cmd.getClientId(), cmd.getIssueId(), cmd.getTitle(), cmd.getDescription()));
@@ -48,7 +48,7 @@ public class Client {
 
     @EventSourcingHandler
     public void on(ClientIssueCreatedEvent event) {
-        this.openIssues.add(event.getIssueId());
+        this.issuesInProgress.add(event.getIssueId());
     }
 
     @CommandHandler
@@ -58,6 +58,6 @@ public class Client {
 
     @EventSourcingHandler
     public void on(ClientIssueClosedEvent event) {
-        this.openIssues.remove(event.getIssueId());
+        this.issuesInProgress.remove(event.getIssueId());
     }
 }
