@@ -3,7 +3,6 @@ package com.kociszewski.helpdesk.infrastracture.client;
 import com.kociszewski.helpdesk.domain.client.ClientCreatedEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.queryhandling.QueryHandler;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
