@@ -15,6 +15,9 @@ curl -H "Content-Type: application/json" -H "client: $CLIENT_ID" -X POST localho
 #my issues
 curl -H "client: $CLIENT_ID" localhost:8080/issues/$CLIENT_ID | json_pp
 
+#get first issue id on list
+ISSUE_ID="$(curl -H "client: $CLIENT_ID" localhost:8080/issues/$CLIENT_ID | jq -r '.[0].issueId')"
+
 #resolve issue
 curl -H "Content-Type: application/json" -H "client: $CLIENT_ID" -X PUT localhost:8080/issues/$ISSUE_ID  -d '{"status": "RESOLVED"}'
 
